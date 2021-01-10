@@ -13,6 +13,12 @@ Shader "Lexikus/Shadow/Shadow1"
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
         _HorizontalSkew ("Horizontal Skew", Float) = 0
         _VerticalSkew ("Vertical Skew", Float) = 0
+        _OffsetX ("Offset X", Float) = 0
+        _OffsetY ("Offset Y", Float) = 0
+        _ScaleX ("Scale X", Float) = 1
+        _ScaleY ("Scale Y", Float) = 1
+        _RotationRad ("Rotation Radians", Float) = 0
+        _ShadowColor ("Shadow Color", Color) = (0,0,0,1)
     }
 
     SubShader
@@ -29,10 +35,10 @@ Shader "Lexikus/Shadow/Shadow1"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
 
         Pass
         {
+        Blend One OneMinusSrcAlpha
         CGPROGRAM
             #pragma vertex vertex
             #pragma fragment fragment
@@ -42,9 +48,16 @@ Shader "Lexikus/Shadow/Shadow1"
             float4 _Color;
             float4 _RendererColor;
             float4 _MainTex_ST;
+            float4 _MainTex_TexelSize;
             fixed2 _Flip;
             float _HorizontalSkew;
             float _VerticalSkew;
+            float _OffsetX;
+            float _OffsetY;
+            float _ScaleX;
+            float _ScaleY;
+            float _RotationRad;
+            float4 _ShadowColor;
 
             struct appdata
             {
@@ -67,9 +80,10 @@ Shader "Lexikus/Shadow/Shadow1"
                 return float4(pos.xy * flip, pos.z, 1.0);
             }
 
-            fixed4 SampleSpriteTexture (float2 uv)
+            fixed4 SampleSpriteTexture(float2 uv)
             {
                 fixed4 color = tex2D (_MainTex, uv);
+                color = color.a > 0.1 ? fixed4(1,1,1,1) : fixed4(1,1,1,0);
 
             #if ETC1_EXTERNAL_ALPHA
                 fixed4 alpha = tex2D (_AlphaTex, uv);
@@ -91,6 +105,36 @@ Shader "Lexikus/Shadow/Shadow1"
                 return mul(transformMatrix, vertex);
             }
 
+             inline float4 rotate(float4 vertex, float rad) {
+                float4x4 transformMatrix = float4x4(
+                    cos(rad),sin(rad),0,0,
+                    -sin(rad),cos(rad),0,0,
+                    0,0,1,0,
+                    0,0,0,1
+                );
+                return mul(transformMatrix, vertex);
+            }
+
+            inline float4 transform(float4 vertex, float x, float y) {
+                float4x4 transformMatrix = float4x4(
+                    1,0,0,x,
+                    0,1,0,y,
+                    0,0,1,0,
+                    0,0,0,1
+                );
+                return mul(transformMatrix, vertex);
+            }
+
+            inline float4 scale(float4 vertex, float x, float y) {
+                float4x4 transformMatrix = float4x4(
+                    1 * x,0,0,0,
+                    0,1 * y,0,0,
+                    0,0,1,0,
+                    0,0,0,1
+                );
+                return mul(transformMatrix, vertex);
+            }
+
             v2f vertex (appdata IN)
             {
                 v2f OUT;
@@ -101,14 +145,13 @@ Shader "Lexikus/Shadow/Shadow1"
                 OUT.vertex = UnityFlipSprite(IN.vertex, _Flip);
                 OUT.texcoord = IN.texcoord;
 
+                OUT.vertex = scale(OUT.vertex, _ScaleX, _ScaleY);
                 OUT.vertex = skew(OUT.vertex, _HorizontalSkew, _VerticalSkew);
-
-                // // Shadow position
-                // OUT.vertex.x += 0.02;
-                // OUT.vertex.y += 0.02;
+                OUT.vertex = rotate(OUT.vertex,_RotationRad);
+                OUT.vertex = transform(OUT.vertex, _OffsetX, _OffsetY);
 
                 // Shadow color
-                OUT.color = float4(0,0,0,0.8);
+                OUT.color = _ShadowColor;
 
                 OUT.vertex = UnityObjectToClipPos(OUT.vertex);
                 #ifdef PIXELSNAP_ON
@@ -120,7 +163,7 @@ Shader "Lexikus/Shadow/Shadow1"
 
             fixed4 fragment (v2f IN): SV_Target
             {
-                fixed4 c = SampleSpriteTexture (IN.texcoord) * IN.color;
+                fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
                 c.rgb *= c.a;
                 return c;
             }
@@ -130,6 +173,7 @@ Shader "Lexikus/Shadow/Shadow1"
         // Sprite Default Pass
         Pass
         {
+        Blend One OneMinusSrcAlpha
         CGPROGRAM
             #pragma vertex SpriteVert
             #pragma fragment SpriteFrag
