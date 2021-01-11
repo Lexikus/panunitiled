@@ -12,7 +12,7 @@ Shader "Lexikus/Shadow/Shadow1"
         [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
         [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
         _HorizontalSkew ("Horizontal Skew", Float) = 0
-        _VerticalSkew ("Vertical Skew", Float) = 0
+        [HideInInspector] _VerticalSkew ("Vertical Skew", Float) = 0
         _OffsetX ("Offset X", Float) = 0
         _OffsetY ("Offset Y", Float) = 0
         _ScaleX ("Scale X", Float) = 1
