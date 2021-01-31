@@ -69,12 +69,12 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HorizontalSkew: 2.34
+    - _HorizontalSkew: 0.5
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _OffsetX: 0
-    - _OffsetY: 0
+    - _OffsetY: 0.09
     - _Parallax: 0.02
     - _PerspectiveX: 0
     - _PerspectiveX1: -0.31
@@ -82,9 +82,9 @@ Material:
     - _PerspectiveY: 0
     - _PerspectiveY1: 0.32
     - _PerspectiveY2: 0
-    - _RotationRad: 0
+    - _RotationRad: 0.12
     - _ScaleX: 1
-    - _ScaleY: 0.26
+    - _ScaleY: 0.79
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
