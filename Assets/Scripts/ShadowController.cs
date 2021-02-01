@@ -1,51 +1,60 @@
 using UnityEngine;
 
-public class ShadowController : MonoBehaviour
-{
+public class ShadowController : MonoBehaviour {
+
     [System.Serializable]
-    public struct MeshData
-    {
+    public struct MeshData {
         public Mesh mesh;
         public Vector3 position;
         public Vector3 rotation;
         public Vector3 scale;
     }
 
+    public bool debug = false;
     public Material material;
-    public RenderTexture rt;
-    public Transform go;
+    public RenderTexture renderTexture;
+    public Transform view;
 
-    public MeshData mesh;
+    public MeshData[] meshs;
 
-    float angle;
-    Matrix4x4 objectMatrix;
-    public Matrix4x4 viewMatrix;
+    private Matrix4x4 viewMatrix = Matrix4x4.identity;
+    private Matrix4x4 projectionMatrix = Matrix4x4.identity;
 
-    void Update()
-    {
-        Quaternion rotation = Quaternion.Euler(mesh.rotation);
-
-        // Create the object transform matrix
-        objectMatrix = Matrix4x4.TRS(mesh.position, rotation, mesh.scale);
-
+    public void Update() {
+        CreateVPMatrices();
         Blit();
     }
 
-    void Blit()
-    {
+    public void OnGUI() {
+        if (!debug) {
+            return;
+        }
+
+        if (Event.current.type.Equals(EventType.Repaint)) {
+            Graphics.DrawTexture(new Rect(0, 0, 256, 256), renderTexture);
+        }
+    }
+
+    /**
+     * Matrices are created every update interavl due to prevent flickering.
+     */
+    private void CreateVPMatrices() {
         // Create an projection matrix
-        // Matrix4x4 projectionMatrix = Matrix4x4.Ortho(-1, 1, -1, 1, 0.1f, 15);
-        Matrix4x4 projectionMatrix = Matrix4x4.Perspective(60, 1f, 0.1f, 15);
-        viewMatrix = go.worldToLocalMatrix;
+        projectionMatrix = Matrix4x4.Ortho(-1, 1, -1, 1, 0.1f, 15);
+        // projectionMatrix = Matrix4x4.Perspective(60, 1f, 0.1f, 15);
 
+        // Create the view matrix
+        viewMatrix = view.worldToLocalMatrix;
+        viewMatrix.m20 *= -1f;
+        viewMatrix.m21 *= -1f;
+        viewMatrix.m22 *= -1f;
+        viewMatrix.m23 *= -1f;
+    }
 
-        // Because there's some switching back and forth between cameras
-        if (Camera.current != null)
-            projectionMatrix *= Camera.current.worldToCameraMatrix.inverse;
-
+    private void Blit() {
         // Remember the current texture and set our own as "active".
         RenderTexture prevRT = RenderTexture.active;
-        RenderTexture.active = rt;
+        RenderTexture.active = renderTexture;
 
         // Set material as "active". Without this, Unity editor will freeze.
         material.SetPass(0);
@@ -54,31 +63,26 @@ public class ShadowController : MonoBehaviour
         GL.PushMatrix();
         GL.LoadProjectionMatrix(projectionMatrix);
 
-        // It seems that the faces are in a wrong order, so we need to flip them
-        GL.invertCulling = true;
+        material.SetMatrix("_viewMatrix", viewMatrix);
 
         // Clear the texture
         GL.Clear(true, true, Color.white);
 
-        // Draw the mesh!
-        Graphics.DrawMeshNow(mesh.mesh, viewMatrix * objectMatrix);
+
+        foreach (var mesh in meshs)
+        {
+            Quaternion rotation = Quaternion.Euler(mesh.rotation);
+            // Create the model matrix
+            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.position, rotation, mesh.scale);
+
+            // Draw the mesh!
+            Graphics.DrawMeshNow(mesh.mesh, objectMatrix);
+        }
 
         // Pop the projection matrix to set it back to the previous one
         GL.PopMatrix();
 
-        // Revert culling
-        GL.invertCulling = false;
-
         // Re-set the RenderTexture to the last used one
         RenderTexture.active = prevRT;
-    }
-
-    // Just for live preview
-    private void OnGUI()
-    {
-        if (Event.current.type.Equals(EventType.Repaint))
-        {
-            Graphics.DrawTexture(new Rect(0, 0, 256, 256), rt);
-        }
     }
 }
