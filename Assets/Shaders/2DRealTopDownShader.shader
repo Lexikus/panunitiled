@@ -23,7 +23,7 @@ Shader "Lexikus/Shadow/2DRealTopDownShader"
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                half depth : DEPTH;
+                float2 depth : DEPTH;
             };
 
             v2f vert (appdata v)
@@ -34,13 +34,13 @@ Shader "Lexikus/Shadow/2DRealTopDownShader"
                 float4x4 mvp = mul(UNITY_MATRIX_P, mv);
                 vertex = mul(mvp, vertex);
                 o.vertex = vertex;
-                o.depth = 0;
+                o.depth = vertex.zw;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                half depth = i.depth;
+                half depth = i.depth.x / i.depth.y;
                 return fixed4(depth,depth,depth,1);
             }
             ENDCG
