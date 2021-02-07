@@ -2,23 +2,27 @@ using UnityEngine;
 
 public class ShadowController : MonoBehaviour {
 
-    [System.Serializable]
-    public struct MeshData {
-        public Mesh mesh;
-        public Vector3 position;
-        public Vector3 rotation;
-        public Vector3 scale;
-    }
+    // [System.Serializable]
+    // public struct MeshData {
+    //     public Mesh mesh;
+    //     public Vector3 position;
+    //     public Vector3 rotation;
+    //     public Vector3 scale;
+    // }
 
     public bool debug = false;
     public Material material;
     public RenderTexture renderTexture;
     public Transform view;
-
-    public MeshData[] meshs;
+    public ShadowMesh[] meshes;
+    public float size = 1f;
 
     private Matrix4x4 viewMatrix = Matrix4x4.identity;
     private Matrix4x4 projectionMatrix = Matrix4x4.identity;
+
+    public void Start() {
+        meshes = FindObjectsOfType<ShadowMesh>();
+    }
 
     public void Update() {
         CreateVPMatrices();
@@ -40,7 +44,14 @@ public class ShadowController : MonoBehaviour {
      */
     private void CreateVPMatrices() {
         // Create an projection matrix
-        projectionMatrix = Matrix4x4.Ortho(-1, 1, -1, 1, 0.1f, 15);
+        projectionMatrix = Matrix4x4.Ortho(
+            -1 * size,
+            1 * size,
+            -1 * size,
+            1 * size,
+            0.1f,
+            15
+        );
         // projectionMatrix = Matrix4x4.Perspective(60, 1f, 0.1f, 15);
 
         // Create the view matrix
@@ -69,11 +80,11 @@ public class ShadowController : MonoBehaviour {
         GL.Clear(true, true, Color.white);
 
 
-        foreach (var mesh in meshs)
+        foreach (var mesh in meshes)
         {
-            Quaternion rotation = Quaternion.Euler(mesh.rotation);
+            // Quaternion rotation = Quaternion.Euler(mesh.transform.rotation);
             // Create the model matrix
-            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.position, rotation, mesh.scale);
+            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.transform.position, mesh.transform.rotation, mesh.transform.localScale);
 
             // Draw the mesh!
             Graphics.DrawMeshNow(mesh.mesh, objectMatrix);

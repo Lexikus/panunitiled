@@ -16,7 +16,7 @@ public static class SkewShadowUniforms
 
 public class SkewShadowController : MonoBehaviour
 {
-    private Renderer rend;
+    private Material material;
     private Shader shader;
     public float horizontalSkew = 0.0f;
     public float verticalSkew = 0.0f;
@@ -24,28 +24,27 @@ public class SkewShadowController : MonoBehaviour
     public float scaleY = 1.0f;
 
     private float ShaderSkewHorizontal {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.HorizontalSkew); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.HorizontalSkew, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.HorizontalSkew); }
+        set { material.SetFloat(OffsetShadowUniforms.HorizontalSkew, value); }
     }
 
     private float ShaderSkewVertical {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.VerticalSkew); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.VerticalSkew, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.VerticalSkew); }
+        set { material.SetFloat(OffsetShadowUniforms.VerticalSkew, value); }
     }
 
     private float ShaderScaleX {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.ScaleX); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.ScaleX, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.ScaleX); }
+        set { material.SetFloat(OffsetShadowUniforms.ScaleX, value); }
     }
 
     private float ShaderScaleY {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.ScaleY); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.ScaleY, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.ScaleY); }
+        set { material.SetFloat(OffsetShadowUniforms.ScaleY, value); }
     }
 
-    public void Start()
-    {
-        rend = GetComponent<Renderer>();
+    public void Awake() {
+        material = GetComponent<Renderer>().material;
     }
 
     public void Update()

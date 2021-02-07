@@ -14,24 +14,24 @@ public static class OffsetShadowUniforms {
 }
 
 public class OffsetShadowController : MonoBehaviour {
-    private Renderer rend;
+    private Material material;
     private Shader shader;
 
     public float offsetX = 0.0f;
     public float offsetY = 0.0f;
 
     private float ShaderOffsetX {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.OffsetX); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.OffsetX, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.OffsetX); }
+        set { material.SetFloat(OffsetShadowUniforms.OffsetX, value); }
     }
 
     private float ShaderOffsetY {
-        get { return rend.material.GetFloat(OffsetShadowUniforms.OffsetY); }
-        set { rend.material.SetFloat(OffsetShadowUniforms.OffsetY, value); }
+        get { return material.GetFloat(OffsetShadowUniforms.OffsetY); }
+        set { material.SetFloat(OffsetShadowUniforms.OffsetY, value); }
     }
 
-    public void Start() {
-        rend = GetComponent<Renderer>();
+    public void Awake() {
+        material = GetComponent<Renderer>().material;
     }
 
     public void Update() {

@@ -2,48 +2,46 @@ Shader "Lexikus/Shadow/2DRealTopDownShader"
 {
     Properties
     {
+        [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
+        _Color ("Tint", Color) = (1,1,1,1)
+        [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+        [HideInInspector] _RendererColor ("RendererColor", Color) = (1,1,1,1)
+        [HideInInspector] _Flip ("Flip", Vector) = (1,1,1,1)
+        [PerRendererData] _AlphaTex ("External Alpha", 2D) = "white" {}
+        [PerRendererData] _EnableExternalAlpha ("Enable External Alpha", Float) = 0
+
+        _ShadowColor ("Shadow Color", Color) = (0,0,0,1)
+        _ShadowMapTex ("Shadow Texture", 2D) = "white" {}
     }
+
     SubShader
     {
+        Tags
+        {
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
+            "PreviewType"="Plane"
+            "CanUseSpriteAtlas"="True"
+        }
+
+        Cull Off
+        Lighting Off
+        ZWrite Off
+
+        // Sprite Default Pass
         Pass
         {
-            CGPROGRAM
-            #pragma vertex vert
-            #pragma fragment frag
-
-            #include "UnityCG.cginc"
-
-            float4x4 _viewMatrix;
-
-            struct appdata
-            {
-                float4 vertex : POSITION;
-            };
-
-            struct v2f
-            {
-                float4 vertex : SV_POSITION;
-                float2 depth : DEPTH;
-            };
-
-            v2f vert (appdata v)
-            {
-                v2f o;
-                float4 vertex = v.vertex;
-                float4x4 mv = mul(_viewMatrix, unity_ObjectToWorld);
-                float4x4 mvp = mul(UNITY_MATRIX_P, mv);
-                vertex = mul(mvp, vertex);
-                o.vertex = vertex;
-                o.depth = vertex.zw;
-                return o;
-            }
-
-            fixed4 frag (v2f i) : SV_Target
-            {
-                half depth = i.depth.x / i.depth.y;
-                return fixed4(depth,depth,depth,1);
-            }
-            ENDCG
+        Blend One OneMinusSrcAlpha
+        CGPROGRAM
+            #pragma vertex SpriteVert
+            #pragma fragment SpriteFrag
+            #pragma target 2.0
+            #pragma multi_compile_instancing
+            #pragma multi_compile_local _ PIXELSNAP_ON
+            #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
+            #include "UnitySprites.cginc"
+        ENDCG
         }
     }
 }

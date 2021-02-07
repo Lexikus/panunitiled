@@ -216,6 +216,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 45, y: -90, z: 0}
+--- !u!33 &234141500 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -5754084199372789682, guid: f952d059b3727468cbceece0d2c9fca9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1452499796}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &661250432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -379,6 +385,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 28.07, y: 0, z: 0}
+--- !u!33 &709843902 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -5754084199372789682, guid: f952d059b3727468cbceece0d2c9fca9,
+    type: 3}
+  m_PrefabInstance: {fileID: 661250432}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1202835939
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -463,6 +475,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b01200c0270cb2099980c8a0816e3f67, type: 3}
+--- !u!33 &1308506168 stripped
+MeshFilter:
+  m_CorrespondingSourceObject: {fileID: -5754084199372789682, guid: b01200c0270cb2099980c8a0816e3f67,
+    type: 3}
+  m_PrefabInstance: {fileID: 1202835939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1452499796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -585,19 +603,10 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: 8d2cadab6b52c9b2380b2c1b4e7787d5, type: 2}
   renderTexture: {fileID: 8400000, guid: 7eb0dfb069d23cc20aa57c50e6e5c7e1, type: 2}
   view: {fileID: 697676506}
-  meshs:
-  - mesh: {fileID: -5495902117074765545, guid: f952d059b3727468cbceece0d2c9fca9, type: 3}
-    position: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0}
-    scale: {x: 10, y: 10, z: 10}
-  - mesh: {fileID: -5495902117074765545, guid: f952d059b3727468cbceece0d2c9fca9, type: 3}
-    position: {x: -0.5, y: -0.2, z: 0.3}
-    rotation: {x: 0, y: 0, z: 0}
-    scale: {x: 10, y: 10, z: 10}
-  - mesh: {fileID: -5495902117074765545, guid: b01200c0270cb2099980c8a0816e3f67, type: 3}
-    position: {x: 0, y: -0.5, z: 0}
-    rotation: {x: -90, y: 0, z: 0}
-    scale: {x: 120, y: 100, z: 2}
+  meshes:
+  - {fileID: 234141500}
+  - {fileID: 709843902}
+  - {fileID: 1308506168}
 --- !u!4 &1460795155
 Transform:
   m_ObjectHideFlags: 0
