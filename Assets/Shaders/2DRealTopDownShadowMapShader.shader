@@ -13,7 +13,7 @@ Shader "Lexikus/Shadow/2DRealTopDownShadowMapShader"
 
             #include "UnityCG.cginc"
 
-            float4x4 _viewMatrix;
+            float4x4 _lightViewMatrix;
 
             struct appdata
             {
@@ -23,25 +23,27 @@ Shader "Lexikus/Shadow/2DRealTopDownShadowMapShader"
             struct v2f
             {
                 float4 vertex : SV_POSITION;
-                float2 depth : DEPTH;
+                float2 lightDepth : TEXCOORD0;
             };
 
             v2f vert (appdata v)
             {
                 v2f o;
-                float4 vertex = v.vertex;
-                float4x4 mv = mul(_viewMatrix, unity_ObjectToWorld);
-                float4x4 mvp = mul(UNITY_MATRIX_P, mv);
-                vertex = mul(mvp, vertex);
-                o.vertex = vertex;
-                o.depth = vertex.zw;
+
+                float4x4 lightMV = mul(_lightViewMatrix, unity_ObjectToWorld);
+                float4x4 lightMVP = mul(UNITY_MATRIX_P, lightMV);
+                float4 lightVertex = mul(lightMVP, v.vertex);
+
+                o.lightDepth = lightVertex.zw;
+                o.vertex = lightVertex;
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                half depth = i.depth.x / i.depth.y;
-                return fixed4(depth,depth,depth,1);
+                half lightDepth = i.lightDepth.x / i.lightDepth.y;
+                lightDepth = 1 - lightDepth;
+                return fixed4(lightDepth, lightDepth, lightDepth, 1);
             }
             ENDCG
         }

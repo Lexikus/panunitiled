@@ -2,23 +2,20 @@ using UnityEngine;
 
 public class ShadowController : MonoBehaviour {
 
-    // [System.Serializable]
-    // public struct MeshData {
-    //     public Mesh mesh;
-    //     public Vector3 position;
-    //     public Vector3 rotation;
-    //     public Vector3 scale;
-    // }
-
     public bool debug = false;
+
+    public Camera cam;
     public Material material;
     public RenderTexture renderTexture;
+
     public Transform view;
-    public ShadowMesh[] meshes;
     public float size = 1f;
 
-    private Matrix4x4 viewMatrix = Matrix4x4.identity;
+    private ShadowMesh[] meshes;
+    private Matrix4x4 sceneViewMatrix = Matrix4x4.identity;
+    private Matrix4x4 lightViewMatrix = Matrix4x4.identity;
     private Matrix4x4 projectionMatrix = Matrix4x4.identity;
+
 
     public void Start() {
         meshes = FindObjectsOfType<ShadowMesh>();
@@ -27,6 +24,21 @@ public class ShadowController : MonoBehaviour {
     public void Update() {
         CreateVPMatrices();
         Blit();
+    }
+
+    public Matrix4x4 getLightViewMatrix() {
+        return lightViewMatrix;
+    }
+
+    public Matrix4x4 getLightProjectionMatrix() {
+        return projectionMatrix;
+    }
+
+    /**
+     * Returns the calculated view projection matrix. It is recommended to cache the value though.
+     */
+    public Matrix4x4 getLightVPMatrix() {
+        return projectionMatrix * lightViewMatrix;
     }
 
     public void OnGUI() {
@@ -43,23 +55,25 @@ public class ShadowController : MonoBehaviour {
      * Matrices are created every update interavl due to prevent flickering.
      */
     private void CreateVPMatrices() {
-        // Create an projection matrix
+        // Create a projection matrix
         projectionMatrix = Matrix4x4.Ortho(
-            -1 * size,
-            1 * size,
-            -1 * size,
-            1 * size,
+            -1f * size,
+            1f * size,
+            -1f * size,
+            1f * size,
             0.1f,
-            15
+            100f
         );
-        // projectionMatrix = Matrix4x4.Perspective(60, 1f, 0.1f, 15);
 
-        // Create the view matrix
-        viewMatrix = view.worldToLocalMatrix;
-        viewMatrix.m20 *= -1f;
-        viewMatrix.m21 *= -1f;
-        viewMatrix.m22 *= -1f;
-        viewMatrix.m23 *= -1f;
+        // Create the scene view matric
+        sceneViewMatrix = cam.worldToCameraMatrix;
+
+        // Create the light view matrix
+        lightViewMatrix = view.worldToLocalMatrix;
+        lightViewMatrix.m20 *= -1f;
+        lightViewMatrix.m21 *= -1f;
+        lightViewMatrix.m22 *= -1f;
+        lightViewMatrix.m23 *= -1f;
     }
 
     private void Blit() {
@@ -74,7 +88,7 @@ public class ShadowController : MonoBehaviour {
         GL.PushMatrix();
         GL.LoadProjectionMatrix(projectionMatrix);
 
-        material.SetMatrix("_viewMatrix", viewMatrix);
+        material.SetMatrix("_lightViewMatrix", lightViewMatrix);
 
         // Clear the texture
         GL.Clear(true, true, Color.white);
@@ -82,11 +96,13 @@ public class ShadowController : MonoBehaviour {
 
         foreach (var mesh in meshes)
         {
-            // Quaternion rotation = Quaternion.Euler(mesh.transform.rotation);
+            if(mesh.mesh == null) {
+                continue;
+            }
             // Create the model matrix
-            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.transform.position, mesh.transform.rotation, mesh.transform.localScale);
+            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.getPosition(), mesh.transform.rotation, mesh.getScale());
 
-            // Draw the mesh!
+            // Draw the mesh
             Graphics.DrawMeshNow(mesh.mesh, objectMatrix);
         }
 
