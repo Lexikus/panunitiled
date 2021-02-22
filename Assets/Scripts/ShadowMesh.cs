@@ -23,6 +23,6 @@ public class ShadowMesh : MonoBehaviour {
 
     public void Update() {
         Matrix4x4 lightSpaceMatrix = shadowController.getLightVPMatrix();
-        material.SetMatrix("_LightSpace", lightSpaceMatrix);
+        material.SetMatrix(ShadowConfig.LightSpaceUniform, lightSpaceMatrix);
     }
 }
