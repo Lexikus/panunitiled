@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: OffsetShadow
-  m_Shader: {fileID: 4800000, guid: b2f80a8e8ae62e8f181f55589de7e020, type: 3}
+  m_Name: RealtimeShadow
+  m_Shader: {fileID: 4800000, guid: 12750679707c74848979f60b1607e52a, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -59,6 +59,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadowMapTex:
+        m_Texture: {fileID: 8400000, guid: 7eb0dfb069d23cc20aa57c50e6e5c7e1, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - PixelSnap: 0
     - _BumpScale: 1
@@ -69,21 +73,15 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HorizontalSkew: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _OffsetX: 0.03
-    - _OffsetY: 0
     - _Parallax: 0.02
-    - _RotationRad: 0
-    - _ScaleX: 1
-    - _ScaleY: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Test: 0
     - _UVSec: 0
-    - _VerticalSkew: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
