@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 2019644955
+    locked: 0
+  - name: Decal
+    uniqueID: 3886056181
+    locked: 0
+  - name: Environment
+    uniqueID: 1447379741
+    locked: 0
+  - name: Decoration
+    uniqueID: 1540945265
+    locked: 0
+  - name: Player
+    uniqueID: 1886725971
+    locked: 0
