@@ -3,6 +3,7 @@ using UnityEngine;
 public class ShadowMesh : MonoBehaviour {
     public Vector3 positionOffset;
     public Vector3 scale;
+    public Vector3 rotationOffset;
 
     public Mesh mesh;
     public ShadowController shadowController;
@@ -19,6 +20,10 @@ public class ShadowMesh : MonoBehaviour {
 
     public Vector3 getScale() {
         return transform.localScale + scale;
+    }
+
+    public Quaternion getRotation() {
+        return Quaternion.Euler(rotationOffset);
     }
 
     public void Update() {

@@ -96,7 +96,7 @@ public class ShadowController : MonoBehaviour {
             if(mesh.mesh == null) {
                 continue;
             }
-            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.getPosition(), mesh.transform.rotation, mesh.getScale());
+            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.getPosition(), mesh.getRotation(), mesh.getScale());
             Graphics.DrawMeshNow(mesh.mesh, objectMatrix);
         }
 
