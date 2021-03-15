@@ -38,15 +38,15 @@ public class ShadowController : MonoBehaviour {
         Blit();
     }
 
-    public Matrix4x4 getLightViewMatrix() {
+    public Matrix4x4 GetLightViewMatrix() {
         return lightViewMatrix;
     }
 
-    public Matrix4x4 getLightProjectionMatrix() {
+    public Matrix4x4 GetLightProjectionMatrix() {
         return projectionMatrix;
     }
 
-    public Matrix4x4 getLightVPMatrix() {
+    public Matrix4x4 GetLightVPMatrix() {
         return projectionMatrix * lightViewMatrix;
     }
 
@@ -96,7 +96,7 @@ public class ShadowController : MonoBehaviour {
             if(mesh.mesh == null) {
                 continue;
             }
-            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.getPosition(), mesh.getRotation(), mesh.getScale());
+            Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.GetPosition(), mesh.GetRotation(), mesh.GetScale());
             Graphics.DrawMeshNow(mesh.mesh, objectMatrix);
         }
 

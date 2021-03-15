@@ -14,20 +14,20 @@ public class ShadowMesh : MonoBehaviour {
         material = GetComponent<Renderer>().material;
     }
 
-    public Vector3 getPosition() {
+    public Vector3 GetPosition() {
         return transform.position + positionOffset;
     }
 
-    public Vector3 getScale() {
+    public Vector3 GetScale() {
         return transform.localScale + scale;
     }
 
-    public Quaternion getRotation() {
+    public Quaternion GetRotation() {
         return Quaternion.Euler(rotationOffset);
     }
 
     public void Update() {
-        Matrix4x4 lightSpaceMatrix = shadowController.getLightVPMatrix();
+        Matrix4x4 lightSpaceMatrix = shadowController.GetLightVPMatrix();
         material.SetMatrix(ShadowConfig.LightSpaceUniform, lightSpaceMatrix);
     }
 }
