@@ -30,15 +30,15 @@ public class SimplePlayer : MonoBehaviour {
         rb2d.AddForce(direction * speed);
         rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, direction, ref velocity, movementSmoothing);
 
-        if(direction.sqrMagnitude > 0) {
+        if (direction.sqrMagnitude > 0) {
             anim.SetBool(AnimationName.Walking, true);
         } else {
             anim.SetBool(AnimationName.Walking, false);
         }
 
-        if(direction.x < 0 && facingRight) {
+        if (direction.x < 0 && facingRight) {
             Flip();
-        } else if(direction.x > 0 && !facingRight) {
+        } else if (direction.x > 0 && !facingRight) {
             Flip();
         }
     }

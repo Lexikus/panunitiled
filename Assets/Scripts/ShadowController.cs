@@ -31,7 +31,7 @@ public class ShadowController : MonoBehaviour {
     }
 
     public void Update() {
-        if(!enableComplexShadow) {
+        if (!enableComplexShadow) {
             return;
         }
         CreateVPMatrices();
@@ -93,7 +93,7 @@ public class ShadowController : MonoBehaviour {
         GL.Clear(true, true, Color.white);
 
         foreach (var mesh in meshes) {
-            if(mesh.mesh == null) {
+            if (mesh.mesh == null) {
                 continue;
             }
             Matrix4x4 objectMatrix = Matrix4x4.TRS(mesh.GetPosition(), mesh.GetRotation(), mesh.GetScale());

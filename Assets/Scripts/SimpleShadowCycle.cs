@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 /*
@@ -17,10 +16,10 @@ public class SimpleShadowCycle : MonoBehaviour {
 
     public void OnCycleChange(float cycle) {
         foreach (var sprite in spriteRenderer) {
-            if(sprite.material.name.Contains("SkewShadow")) {
+            if (sprite.material.name.Contains("SkewShadow")) {
                 sprite.material.SetFloat(ShadowConfig.HorizontalSkewUniform, skew * cycle);
             }
-            if(sprite.material.name.Contains("OffsetShadow")) {
+            if (sprite.material.name.Contains("OffsetShadow")) {
                 sprite.material.SetFloat(ShadowConfig.OffsetXUniform, offset * cycle);
             }
         }
