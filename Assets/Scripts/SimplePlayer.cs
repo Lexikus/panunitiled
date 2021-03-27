@@ -1,5 +1,14 @@
 using UnityEngine;
 
+static class AxisName {
+    public static string Horizontal = "Horizontal";
+    public static string Vertical = "Vertical";
+}
+
+static class AnimationName {
+    public static string Walking = "Walking";
+}
+
 public class SimplePlayer : MonoBehaviour {
     public float speed;
     public float movementSmoothing = 0.05f;
@@ -14,23 +23,22 @@ public class SimplePlayer : MonoBehaviour {
     }
 
     public void FixedUpdate() {
-        float moveHorizontal = Input.GetAxis("Horizontal");
-        float moveVertical = Input.GetAxis("Vertical");
+        float moveHorizontal = Input.GetAxis(AxisName.Horizontal);
+        float moveVertical = Input.GetAxis(AxisName.Vertical);
 
         Vector2 direction = new Vector2(moveHorizontal, moveVertical);
         rb2d.AddForce(direction * speed);
         rb2d.velocity = Vector3.SmoothDamp(rb2d.velocity, direction, ref velocity, movementSmoothing);
 
-        // player is moving
-        if(direction.sqrMagnitude > 0) {
-            anim.SetBool("Walking", true);
+        if (direction.sqrMagnitude > 0) {
+            anim.SetBool(AnimationName.Walking, true);
         } else {
-            anim.SetBool("Walking", false);
+            anim.SetBool(AnimationName.Walking, false);
         }
 
-        if(direction.x < 0 && facingRight) {
+        if (direction.x < 0 && facingRight) {
             Flip();
-        } else if(direction.x > 0 && !facingRight) {
+        } else if (direction.x > 0 && !facingRight) {
             Flip();
         }
     }

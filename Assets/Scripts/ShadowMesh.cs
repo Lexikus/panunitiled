@@ -25,9 +25,4 @@ public class ShadowMesh : MonoBehaviour {
     public Quaternion GetRotation() {
         return Quaternion.Euler(rotationOffset);
     }
-
-    public void Update() {
-        Matrix4x4 lightSpaceMatrix = shadowController.GetLightVPMatrix();
-        material.SetMatrix(ShadowConfig.LightSpaceUniform, lightSpaceMatrix);
-    }
 }

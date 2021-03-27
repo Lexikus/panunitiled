@@ -3081,12 +3081,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shadowColor: {r: 0.59607846, g: 0.44705883, b: 0.6392157, a: 0.68235296}
   enableComplexShadow: 0
-  cam: {fileID: 2020467660}
+  cam: {fileID: 0}
   shadowEye: {fileID: 0}
   debug: 0
-  material: {fileID: 2100000, guid: 8d2cadab6b52c9b2380b2c1b4e7787d5, type: 2}
-  renderTexture: {fileID: 8400000, guid: 7eb0dfb069d23cc20aa57c50e6e5c7e1, type: 2}
-  size: 4
+  material: {fileID: 0}
+  renderTexture: {fileID: 0}
+  size: 1
 --- !u!4 &382824832
 Transform:
   m_ObjectHideFlags: 0
@@ -14408,7 +14408,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 26
-    m_FontStyle: 0
+    m_FontStyle: 1
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
